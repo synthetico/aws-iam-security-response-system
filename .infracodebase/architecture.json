@@ -1,0 +1,127 @@
+{
+  "name": "AWS IAM Security Response System",
+  "nodes": [
+    {
+      "id": "health",
+      "label": "AWS Health",
+      "x": 440,
+      "y": 0,
+      "subtitle": "AWS_RISK_CREDENTIALS_EXPOSED",
+      "icon": "/icons/aws/management/cloudwatch.png"
+    },
+    {
+      "id": "eventbridge",
+      "label": "EventBridge Rule",
+      "x": 440,
+      "y": 300,
+      "subtitle": "iam-security-automation-credential-exposure-rule",
+      "icon": "/icons/aws/integration/eventbridge-rule.png"
+    },
+    {
+      "id": "lambda",
+      "label": "Lambda Function",
+      "x": 440,
+      "y": 600,
+      "subtitle": "iam_leaked_credential_killswitch",
+      "icon": "/icons/aws/compute/lambda-function.png"
+    },
+    {
+      "id": "iam_action",
+      "label": "IAM Action",
+      "x": 220,
+      "y": 950,
+      "subtitle": "Disable Access Keys",
+      "icon": "/icons/aws/security/identity-and-access-management-iam.png"
+    },
+    {
+      "id": "sns",
+      "label": "SNS Topic",
+      "x": 660,
+      "y": 950,
+      "subtitle": "credential-exposure-alerts",
+      "icon": "/icons/aws/integration/simple-notification-service-sns-topic.png"
+    },
+    {
+      "id": "email",
+      "label": "IT Team Email",
+      "x": 880,
+      "y": 950,
+      "subtitle": "Alert Notification",
+      "icon": "/icons/aws/engagement/simple-email-service-ses-email.png"
+    },
+    {
+      "id": "cloudwatch",
+      "label": "CloudWatch Logs",
+      "x": 0,
+      "y": 950,
+      "subtitle": "90-day retention",
+      "icon": "/icons/aws/management/cloudwatch-logs.png"
+    },
+    {
+      "id": "dlq",
+      "label": "Dead Letter Queue",
+      "x": 440,
+      "y": 950,
+      "subtitle": "Failed invocations",
+      "icon": "/icons/aws/integration/simple-queue-service-sqs-queue.png"
+    },
+    {
+      "id": "kms",
+      "label": "KMS Key",
+      "x": 660,
+      "y": 600,
+      "subtitle": "SNS encryption",
+      "icon": "/icons/aws/security/key-management-service.png"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "source": "health",
+      "target": "eventbridge",
+      "label": "triggers"
+    },
+    {
+      "id": "e2",
+      "source": "eventbridge",
+      "target": "lambda",
+      "label": "invokes"
+    },
+    {
+      "id": "e3",
+      "source": "lambda",
+      "target": "iam_action",
+      "label": "UpdateAccessKey"
+    },
+    {
+      "id": "e4",
+      "source": "lambda",
+      "target": "sns",
+      "label": "publishes"
+    },
+    {
+      "id": "e5",
+      "source": "sns",
+      "target": "email",
+      "label": "sends notification"
+    },
+    {
+      "id": "e6",
+      "source": "lambda",
+      "target": "cloudwatch",
+      "label": "logs"
+    },
+    {
+      "id": "e7",
+      "source": "lambda",
+      "target": "dlq",
+      "label": "on failure"
+    },
+    {
+      "id": "e8",
+      "source": "kms",
+      "target": "sns",
+      "label": "encrypts"
+    }
+  ]
+}
