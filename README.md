@@ -26,6 +26,25 @@ View the architecture diagram in the Canvas tab.
 - **Monitoring**: CloudWatch alarms for Lambda errors and DLQ messages
 - **Email Alerts**: IT team receives detailed notifications with remediation steps
 
+##. Where does it work? (The Coverage)
+AWS has "Secret Scanning" partnerships with major platforms. If a key is leaked in any of the following, AWS will likely detect it and trigger your system:
+
+GitHub: (Public repositories and even private ones if the organization has enabled secret scanning).
+
+Postman: Public collections.
+
+DockerHub: Public container descriptions or layers.
+
+Other Partners: PyPI, npm, and Terraform Registry.
+
+2. How fast is it?
+In 2026, the speed is impressive but not "instant."
+
+Detection: Usually happens within 60 to 120 seconds of the "Push" or "Save" action on GitHub.
+
+The Race: Your Lambda will trigger immediately after detection, but a sophisticated hacker bot can sometimes find and use a key in under 30 seconds.
+
+Note: This is why AWS often applies an internal "Quarantine" policy (AWSCompromisedKeyQuarantineV2) to the user automatically while your Lambda is still spinning up.
 ## Prerequisites
 
 - AWS account with appropriate permissions
